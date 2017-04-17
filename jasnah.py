@@ -1,5 +1,7 @@
 #!/usr/bin/env python
+import argparse
 import readline
+import sys
 
 """
 Mathematical Anti-Telharsic Harfatum Septomin
@@ -15,21 +17,23 @@ def apply_op(op, x, y):
         return x/(y*1.0)
     if op == '*':
         return x * y
-    raise ValueError("{} is not a supported operator :(.".format(op))
+    print("{} is not currently a supported operator :(.".format(op))
 
 
 def apply_op_identity(op, x):
-    if op in ('+', '-'):
+    if op == '+':
         return apply_op(op, x, 0)
+    if op == '-':
+        return apply_op(op, 0, x)
     if op == '/':
         return apply_op(op, 1, x)
     if op == '*':
         return apply_op(op, x, 1)
 
 
-def process_list(l):
-    op = l[0]
-    args = l[1:]
+def resolve_list(L):
+    op = L[0]
+    args = L[1:]
     if len(args) == 1:
         return apply_op_identity(op, args[0])
     while len(args) > 1:
@@ -46,13 +50,26 @@ def list_is_nested(L):
     return False
 
 
-def innermost(L):
-    if not list_is_nested(L):
-        return L
+def resolve_left_innermost(L, inner=None):
+    if inner is None:
+        inner = L
+
+    for idx, item in enumerate(inner):
+        if isinstance(item, list) and not list_is_nested(item):
+            inner[idx] = resolve_list(item)
+            return L
+        if isinstance(item, list):
+            return resolve_left_innermost(L, item)
+
+
+def jasnah_eval(L, trace=False):
+    if trace:
+        print('# TRACE: {}'.format(L))
+    if list_is_nested(L):
+        L = resolve_left_innermost(L)
+        return jasnah_eval(L, trace=trace)
     else:
-        for idx, item in enumerate(L):
-            if isinstance(item, list):
-                return innermost(L[idx])
+        return resolve_list(L)
 
 
 def tokenize(chars):
@@ -83,15 +100,26 @@ def read_from_tokens(tokens):
         try:
             return int(token)
         except:
-            return token
+            try:
+                return float(token)
+            except:
+                return token
 
-
-def e(code_as_str):
-    return process_list(read_from_tokens(tokenize(code_as_str)))
 
 if __name__ == '__main__':
     "A prompt-read-eval-print loop."
+
+    parser = argparse.ArgumentParser(description="LISPy math REPL")
+    parser.add_argument('--trace', required=False, action="store_true")
+    args = parser.parse_args()
+
     while True:
-        val = raw_input('jasnah=> ').lstrip().rstrip()
-        if val is not None:
-            print(e(val))
+        try:
+            val = raw_input('jasnah=> ').lstrip().rstrip()
+            if val is not None:
+                print(jasnah_eval(read_from_tokens(tokenize(val)), trace=args.trace))
+        except KeyboardInterrupt:
+            print('')
+        except EOFError:
+            print("Be on your way now.")
+            sys.exit(0)
