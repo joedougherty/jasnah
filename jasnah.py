@@ -62,6 +62,12 @@ def resolve_left_innermost(L, inner=None):
         inner = L
 
     for idx, item in enumerate(inner):
+        """
+        If we found a flat list, we know we've bottomed out.
+
+        Replace the list with the resolved, numeric value
+        and pass the modified containing list back to the caller.
+        """
         if isinstance(item, list) and not list_is_nested(item):
             inner[idx] = resolve_list(item)
             return L
@@ -142,8 +148,6 @@ def read_from_tokens(tokens):
 
 
 if __name__ == '__main__':
-    "A prompt-read-eval-print loop."
-
     parser = argparse.ArgumentParser(description="LISPy math REPL")
     parser.add_argument('--trace', required=False, action="store_true")
     args = parser.parse_args()
