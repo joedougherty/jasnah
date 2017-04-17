@@ -51,6 +51,13 @@ def list_is_nested(L):
 
 
 def resolve_left_innermost(L, inner=None):
+    """
+    Given a nested list L:
+        * Find the left-innermost nested list
+        * Resolve it to a numeric value by applying resolve_list
+        * Replace the nested list with the resolved value
+        * Return L
+    """
     if inner is None:
         inner = L
 
@@ -63,6 +70,35 @@ def resolve_left_innermost(L, inner=None):
 
 
 def jasnah_eval(L, trace=False):
+    """
+    Given a list L where:
+        * L[0] is an operator
+        * L[> 0] will either be of type:
+            * int _or_
+            * float _or_
+            * a list that also follows these rules
+
+    If L is flat:
+        apply resolve_list
+    Else:
+        Successively apply resolve_left_innermost until L is a flat list
+
+    Examples:
+    ========
+    # Flat lists are immediately resolved
+    L = ['+', 1, 2, 3]
+    resolve_list(L)
+    >> 6
+
+    # List is nested -- apply resolve_left_innermost
+    L = ['+', 1, 2, 3, ['-', 4, 5, 6], ['*', 7, 8]]
+    # List is nested -- apply resolve_left_innermost
+    L = ['+', 1, 2, 3, -7, ['*', 7, 8]]
+    # List is nested -- apply resolve_left_innermost
+    L = ['+', 1, 2, 3, -7, 56]
+    resolve_list(L)
+    >> 55
+    """
     if trace:
         print('# TRACE: {}'.format(L))
     if list_is_nested(L):
