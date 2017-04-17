@@ -66,8 +66,7 @@ def jasnah_eval(L, trace=False):
     if trace:
         print('# TRACE: {}'.format(L))
     if list_is_nested(L):
-        L = resolve_left_innermost(L)
-        return jasnah_eval(L, trace=trace)
+        return jasnah_eval(resolve_left_innermost(L), trace=trace)
     else:
         return resolve_list(L)
 
