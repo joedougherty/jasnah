@@ -100,7 +100,7 @@ def jasnah_eval(L, trace=False):
     L = ['+', 1, 2, 3, ['-', 4, 5, 6], ['*', 7, 8]]
     # List is nested -- apply resolve_left_innermost
     L = ['+', 1, 2, 3, -7, ['*', 7, 8]]
-    # List is nested -- apply resolve_left_innermost
+    # Flat lists are resolved
     L = ['+', 1, 2, 3, -7, 56]
     resolve_list(L)
     >> 55
