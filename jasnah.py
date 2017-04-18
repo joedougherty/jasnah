@@ -20,7 +20,11 @@ OPS = {'=': operator.eq,
        '*': lambda x, y: x*y,
        'and': lambda x, y: x and y,
        'or': lambda x, y: x or y,
-       'not': lambda x: not x}
+       'not': lambda x: not x,
+       '>': lambda x, y: x > y,
+       '<': lambda x, y: x < y,
+       '>=': lambda x, y: x >= y,
+       '<=': lambda x, y: x <= y}
 
 # Some delightful little aliases
 OPS['¬'] = OPS['not']
