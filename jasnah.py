@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import argparse
 import readline
+from six.moves import input
 import sys
 
 """
@@ -158,7 +159,7 @@ if __name__ == '__main__':
 
     while True:
         try:
-            val = raw_input('jasnah=> ').lstrip().rstrip()
+            val = input('jasnah=> ').lstrip().rstrip()
             if val is not None:
                 print(jasnah_eval(read_from_tokens(tokenize(val)), trace=args.trace))
         except KeyboardInterrupt:
