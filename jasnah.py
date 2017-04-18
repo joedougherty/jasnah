@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
 import argparse
 import operator
 import readline
@@ -14,8 +17,15 @@ OPS = {'=': operator.eq,
        '+': lambda x, y: x+y,
        '-': lambda x, y: x-y,
        '/': lambda x, y: x/(y*1.0),
-       '*': lambda x, y: x*y}
+       '*': lambda x, y: x*y,
+       'and': lambda x, y: x and y,
+       'or': lambda x, y: x or y,
+       'not': lambda x: not x}
 
+# Some delightful little aliases
+OPS['¬'] = OPS['not']
+OPS['∧'] = OPS['and']
+OPS['∨'] = OPS['or']
 
 def apply_op(op, x, y):
     try:
