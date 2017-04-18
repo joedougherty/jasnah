@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import argparse
+import operator
 import readline
 from six.moves import input
 import sys
@@ -9,16 +10,18 @@ Mathematical Anti-Telharsic Harfatum Septomin
 """
 
 
+OPS = {'=': operator.eq,
+       '+': lambda x, y: x+y,
+       '-': lambda x, y: x-y,
+       '/': lambda x, y: x/(y*1.0),
+       '*': lambda x, y: x*y}
+
+
 def apply_op(op, x, y):
-    if op == '+':
-        return x + y
-    if op == '-':
-        return x - y
-    if op == '/':
-        return x/(y*1.0)
-    if op == '*':
-        return x * y
-    print("{} is not currently a supported operator :(.".format(op))
+    try:
+        return OPS[op](x,y)
+    except:
+        return "{} is not currently a supported operator :(.".format(op)
 
 
 def apply_op_identity(op, x):
