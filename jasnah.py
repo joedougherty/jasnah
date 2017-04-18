@@ -35,6 +35,9 @@ def apply_op(op, x, y):
 
 
 def apply_op_identity(op, x):
+    if op in ('and', 'or', 'not', '¬', '∧', '∨'):
+        return "'{}' takes a minimum of two args!".format(op)
+
     if op == '+':
         return apply_op(op, x, 0)
     if op == '-':
@@ -44,6 +47,9 @@ def apply_op_identity(op, x):
     if op == '*':
         return apply_op(op, x, 1)
 
+    # If there's no identity-specific behavior defined, pass
+    # it along to apply_op so that can handle error reporting
+    return apply_op(op, x)
 
 def resolve_list(L):
     op = L[0]
