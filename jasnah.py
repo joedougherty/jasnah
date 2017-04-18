@@ -35,7 +35,7 @@ def apply_op(op, x, y):
 
 
 def apply_op_identity(op, x):
-    if op in ('and', 'or', 'not', '¬', '∧', '∨'):
+    if op in ('and', 'or', '∧', '∨'):
         return "'{}' takes a minimum of two args!".format(op)
 
     if op == '+':
@@ -46,6 +46,8 @@ def apply_op_identity(op, x):
         return apply_op(op, 1, x)
     if op == '*':
         return apply_op(op, x, 1)
+    if op in ('not', '¬'):
+        return not x
 
     # If there's no identity-specific behavior defined, pass
     # it along to apply_op so that can handle error reporting
@@ -168,6 +170,10 @@ def read_from_tokens(tokens):
             try:
                 return float(token)
             except:
+                if token in ('False', 'false'):
+                    return False
+                if token in ('True', 'true'):
+                    return True
                 return token
 
 
